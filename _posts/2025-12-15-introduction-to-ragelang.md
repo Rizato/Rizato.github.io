@@ -32,7 +32,7 @@ Any code below the foundation will fall out.
 Supports are the structure that hold up the code. 
 These can be made up of comments, or the code itself. 
 To support a character, there needs to be a supported character below it, with some wiggle allowing for the character to also be the left, or right by one character.
-This allows developers to make tree like supports. 
+This allows developers to make tall, skinny, minimal supports.
 
 Here is an over-supported example.
 
