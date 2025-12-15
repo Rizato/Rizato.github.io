@@ -2,7 +2,7 @@
 
 The official website for Ragelang, a programming language built for [Langjam Gamejam 2025](https://langjamgamejam.com).
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -52,7 +52,7 @@ bundle exec jekyll build
 └── docs.html            # Documentation index
 ```
 
-## ✍️ Writing Blog Posts
+## Writing Blog Posts
 
 1. Create a new file in `_posts/` with the format:
    ```
@@ -86,7 +86,7 @@ tags: [devlog, implementation]
 Today we built the lexer for Ragelang...
 ```
 
-## 📚 Adding Documentation
+## Adding Documentation
 
 1. Create a new file in `_docs/`:
    ```
@@ -105,7 +105,7 @@ Today we built the lexer for Ragelang...
 
 3. Write documentation in Markdown.
 
-## 🎨 Theme
+## Theme
 
 This site uses a custom dark theme with fiery accents inspired by the "Rage" in Ragelang:
 
@@ -121,7 +121,7 @@ This site uses a custom dark theme with fiery accents inspired by the "Rage" in 
 
 Edit `assets/css/style.css` to customize.
 
-## 🌐 Deploying to GitHub Pages
+## Deploying to GitHub Pages
 
 This site is configured to deploy automatically with GitHub Pages:
 
@@ -137,10 +137,6 @@ If you need to deploy manually:
 bundle exec jekyll build
 # Upload _site/ contents to your hosting provider
 ```
-
-## 📝 License
-
-This website and its content are part of the Ragelang project for Langjam Gamejam 2025.
 
 ## 🔗 Links
 
