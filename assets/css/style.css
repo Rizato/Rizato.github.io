@@ -344,6 +344,26 @@ img {
 .code-body .function { color: var(--accent-teal); }
 .code-body .string { color: var(--accent-sand); }
 
+.code-output {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--bg-primary);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.output-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.output-text {
+  color: var(--accent-mint);
+}
+
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
