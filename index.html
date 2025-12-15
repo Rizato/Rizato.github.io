@@ -1,0 +1,66 @@
+---
+layout: default
+title: Home
+---
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Langjam Gamejam 2025</div>
+    <h1 class="hero-title">
+      <span class="gradient-text">Ragelang</span>
+    </h1>
+    <p class="hero-subtitle">A programming language built for games, built with passion.</p>
+    <div class="hero-actions">
+      <a href="{{ '/docs/' | relative_url }}" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/Rizato/ragelang" class="btn btn-secondary" target="_blank" rel="noopener">
+        View on GitHub
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-code">
+    <div class="code-window">
+      <div class="code-header">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="code-title">hello.rage</span>
+      </div>
+      <pre class="code-body"><code><span class="comment">// Welcome to Ragelang!</span>
+<span class="keyword">fn</span> <span class="function">main</span>() {
+    <span class="keyword">let</span> message = <span class="string">"Hello, Gamejam!"</span>
+    <span class="function">print</span>(message)
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <h2 class="section-title">Why Ragelang?</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🎮</div>
+      <h3>Built for Games</h3>
+      <p>Designed from the ground up with game development in mind.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Fast & Lightweight</h3>
+      <p>Minimal overhead, maximum performance for your game logic.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📖</div>
+      <h3>Easy to Learn</h3>
+      <p>Simple syntax that gets out of your way and lets you create.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Ready to get started?</h2>
+  <p>Check out the documentation or read about the development journey on our blog.</p>
+  <div class="cta-actions">
+    <a href="{{ '/docs/' | relative_url }}" class="btn btn-primary">Read the Docs</a>
+    <a href="{{ '/blog/' | relative_url }}" class="btn btn-secondary">Visit the Blog</a>
+  </div>
+</section>
+

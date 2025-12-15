@@ -1,0 +1,26 @@
+---
+layout: default
+title: Documentation
+permalink: /docs/
+---
+<div class="docs-index">
+  <h1>Documentation</h1>
+  <p>Learn how to use Ragelang with our guides and reference documentation.</p>
+
+  <div class="docs-cards">
+    {% assign docs = site.docs | sort: "order" %}
+    {% for doc in docs %}
+      <a href="{{ doc.url | relative_url }}" class="doc-card">
+        <h3>{{ doc.title }}</h3>
+        <p>{{ doc.description | default: "Read more about " | append: doc.title }}</p>
+      </a>
+    {% endfor %}
+
+    {% if site.docs.size == 0 %}
+      <div class="no-docs">
+        <p>Documentation coming soon!</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+

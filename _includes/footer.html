@@ -1,0 +1,36 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Ragelang</span>
+        <p>Built for <a href="https://langjamgamejam.com" target="_blank" rel="noopener">Langjam Gamejam 2025</a></p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="{{ '/' | relative_url }}">Home</a></li>
+            <li><a href="{{ '/about/' | relative_url }}">About</a></li>
+            <li><a href="{{ '/docs/' | relative_url }}">Docs</a></li>
+            <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="https://github.com/Rizato/ragelang" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://langjamgamejam.com" target="_blank" rel="noopener">Langjam Gamejam</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ site.time | date: '%Y' }} Ragelang. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
