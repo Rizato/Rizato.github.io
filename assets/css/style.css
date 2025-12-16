@@ -364,6 +364,23 @@ img {
   color: var(--accent-mint);
 }
 
+.btn-try-now {
+  margin-left: auto;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent-ember), var(--accent-flame));
+  color: var(--bg-primary) !important;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-try-now:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(232, 155, 74, 0.4);
+  color: var(--bg-primary) !important;
+}
+
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;

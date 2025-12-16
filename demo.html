@@ -1,0 +1,943 @@
+---
+layout: null
+title: Playground
+description: Try Ragelang in your browser - an interactive code editor and game canvas
+permalink: /demo/
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | Ragelang</title>
+  <meta name="description" content="{{ page.description }}">
+  <meta name="author" content="Rizato">
+  
+  <!-- Open Graph / Social (Facebook, iMessage, WhatsApp, etc.) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:title" content="{{ page.title }} | Ragelang">
+  <meta property="og:description" content="{{ page.description }}">
+  <meta property="og:site_name" content="Ragelang">
+  <meta property="og:image" content="{{ '/assets/images/og-preview.svg' | absolute_url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Ragelang Playground - Code editor with game canvas">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page.title }} | Ragelang">
+  <meta name="twitter:description" content="{{ page.description }}">
+  <meta name="twitter:image" content="{{ '/assets/images/og-preview.svg' | absolute_url }}">
+  
+  <!-- Mobile / PWA -->
+  <meta name="theme-color" content="#12131a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ragelang">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/images/favicon.svg' | relative_url }}">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #12131a;
+      --bg-secondary: #1a1c25;
+      --bg-tertiary: #262a38;
+      --bg-elevated: #2e3344;
+      --bg-editor: #0d0d14;
+      --text-primary: #e4e6ed;
+      --text-secondary: #8b90a5;
+      --text-muted: #5c6178;
+      --accent-ember: #e89b4a;
+      --accent-flame: #f06543;
+      --accent-coral: #e85d75;
+      --accent-teal: #3fc1b0;
+      --accent-mint: #5cc98c;
+      --accent-sand: #d4c07a;
+      --accent-lavender: #9b8acd;
+      --border-color: #2a2a3a;
+      --line-number-bg: #0a0a0f;
+      --fallen-highlight: rgba(232, 155, 74, 0.3);
+      --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(ellipse at 20% 20%, rgba(232, 155, 74, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(240, 101, 67, 0.06) 0%, transparent 50%);
+    }
+
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(26, 28, 37, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-ember), var(--accent-flame));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tagline {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .example-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .example-selector label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .example-selector select {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      padding: 0.5rem 2rem 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b90a5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+    }
+
+    .example-selector select:hover {
+      border-color: var(--accent-ember);
+    }
+
+    .example-selector select:focus {
+      outline: none;
+      border-color: var(--accent-ember);
+      box-shadow: 0 0 0 3px rgba(232, 155, 74, 0.15);
+    }
+
+    .back-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent-ember);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      max-width: 1800px;
+      margin: 0 auto;
+      height: calc(100vh - 70px);
+    }
+
+    .panel {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .panel-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .code-editor {
+      flex: 1;
+      display: flex;
+      background: var(--bg-editor);
+      overflow: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 0;
+    }
+
+    .line-numbers {
+      padding: 1rem 0;
+      background: var(--line-number-bg);
+      color: var(--text-muted);
+      text-align: right;
+      user-select: none;
+      border-right: 1px solid var(--border-color);
+      min-width: 50px;
+      overflow: hidden;
+    }
+
+    .line-numbers .line-num {
+      padding: 0 0.75rem;
+      display: block;
+    }
+
+    .code-content {
+      flex: 1;
+      position: relative;
+      min-width: 0;
+    }
+
+    #editor {
+      width: 100%;
+      height: 100%;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 1rem;
+      background: transparent;
+      color: var(--text-primary);
+      border: none;
+      resize: none;
+      outline: none;
+      tab-size: 2;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    #editor::placeholder {
+      color: var(--text-muted);
+    }
+
+    .processed-view {
+      display: none;
+      width: 100%;
+      height: 100%;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 1rem;
+      background: transparent;
+      color: var(--text-primary);
+      white-space: pre;
+      overflow: auto;
+    }
+
+    .processed-view.visible {
+      display: block;
+    }
+
+    .fallen-char {
+      background: var(--fallen-highlight);
+      color: var(--accent-ember);
+      border-radius: 2px;
+    }
+
+    .output-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .canvas-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: #000;
+      min-height: 300px;
+    }
+
+    #game-canvas {
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .console-area {
+      border-top: 1px solid var(--border-color);
+      max-height: 150px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .console-header {
+      padding: 0.4rem 1rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    #console {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 0.5rem 1rem;
+      white-space: pre-wrap;
+      color: var(--text-secondary);
+      min-height: 40px;
+    }
+
+    .console-line {
+      padding: 0.15rem 0;
+    }
+
+    .console-line.error {
+      color: var(--accent-coral);
+    }
+
+    .console-line.success {
+      color: var(--accent-mint);
+    }
+
+    .btn {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-ember), var(--accent-flame));
+      color: var(--bg-primary);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(232, 155, 74, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-elevated);
+      border-color: var(--accent-ember);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+    }
+
+    .tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      color: var(--accent-ember);
+      border-bottom-color: var(--accent-ember);
+    }
+
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 19, 26, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .loading-overlay.hidden {
+      display: none;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--bg-tertiary);
+      border-top-color: var(--accent-ember);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      margin-top: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 1024px) {
+      main {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: calc(100vh - 70px);
+      }
+      
+      .panel {
+        min-height: 450px;
+      }
+
+      header {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .tagline {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header-left {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .example-selector {
+        width: 100%;
+      }
+
+      .example-selector select {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading Ragelang...</div>
+  </div>
+
+  <header>
+    <div class="header-left">
+      <a href="{{ '/' | relative_url }}" class="logo">🔥 Ragelang</a>
+      <span class="tagline">Playground</span>
+    </div>
+    <div class="example-selector">
+      <label for="example-select">Example:</label>
+      <select id="example-select">
+        <option value="bouncing-ball">Bouncing Ball</option>
+        <option value="platformer">Platformer</option>
+        <option value="hello-world">Hello World</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+    <a href="{{ '/' | relative_url }}" class="back-link">← Back to Site</a>
+  </header>
+  
+  <main>
+    <div class="panel editor-container">
+      <div class="panel-header">
+        <div class="tabs">
+          <div class="tab active" data-tab="source">Source</div>
+          <div class="tab" data-tab="processed">Processed</div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="clear-btn">Clear</button>
+          <button class="btn btn-primary" id="run-btn">▶ Run</button>
+        </div>
+      </div>
+      <div class="code-editor">
+        <div class="line-numbers" id="source-line-numbers"></div>
+        <div class="code-content">
+          <textarea id="editor" placeholder="Write your Ragelang code here...
+
+Remember: Characters must be supported by characters beneath them!
+Use # to create the foundation." spellcheck="false"></textarea>
+          <div id="processed" class="processed-view"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="panel output-container">
+      <div class="panel-header">
+        <span class="panel-title">Output</span>
+        <button class="btn btn-secondary" id="stop-btn">⏹ Stop</button>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas" width="600" height="400"></canvas>
+      </div>
+      <div class="console-area">
+        <div class="console-header">Console</div>
+        <div id="console"></div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    // Example programs
+    const EXAMPLES = {
+      'hello-world': `//         to RageLang!
+// Welcome  | | | | |
+// | | | |   | | | |
+// Author:    Rizato
+print("Hello, World! ")
+// | | | | |         |
+######################`,
+
+      'bouncing-ball': `// A simple bouncing ball demo
+// | | | | | | | | | | | | | |
+//  | | | | | |   | | | | | |
+ball_x = 300 //    | | | | |
+ball_y = 200 //     | | | |
+vel_x = 150 //       | | |
+vel_y = 100 //        | |
+draw { // | |          |
+ // | | | | |          |
+  clear("#1a1a2e") //  |
+  circle(ball_x, ball_y, 20, "#ff3366")
+  text("Bouncing Ball", 10, 30, 24, "#ffffff")
+} //  | | | | | | | | | | | | | | | | | | | |
+// | | | | | | | | | | | | | |   | | | | | |
+update(dt) { // | | | | | | | |   | | | | |
+ // | | | | | | | | | | | | | |    | | | | 
+  ball_x = ball_x + vel_x * dt //   | | |
+  ball_y = ball_y + vel_y * dt //    | |
+  // | | | | | | | | | | | | | |      |
+  if (ball_x > 580) { //  | | |       |
+  // | | | | | | | | | |   | |       |
+   // | | | | | | | | |     |       |
+    vel_x = -150 // | |      |     |
+  } // | | | | | | | |        |   |
+  if (ball_x < 20) { //        | |
+   // | | | | | | | | |         | 
+    // | | | | | | | |         |
+    vel_x = 150 // | |        |
+  } // | | | | | | | |       |
+  if (ball_y > 380) { //    |
+   // | | | | | | | | |    |
+    // | | | | | | | |    |
+    vel_y = -100 // |    |
+  } // | | | | | | |    |
+  if (ball_y < 20) { //|
+   // | | | | | | | | |
+    // | | | | | | | |
+    vel_y = 100 //| |
+  } // | | | | | | |
+} //  | | | | | | | 
+// | | | | | | | | 
+##################`,
+
+      'platformer': `// Simple platformer with controls
+//  | | | | | | | | | | | | | | |
+//   | | | | | | | | | |   |   |
+player = prototype() //     | |
+player.x = 100 //  | |       |
+player.y = 300 //   |       |
+player.vel_y = 0 // |      |
+player.on_ground = true //|
+//  | | | | | | | | | | | |
+gravity = 800 //   |   | |
+jump_force = -400 //    |
+move_speed = 200 //     |
+// | | | | | | | |      |
+ground_y = 350 //       |
+// | | | | | | |        |
+// Trail system         |
+trail = [] //  |        |
+trail_max = 8 //        |
+//  | | | | | |         |
+// Helper function     |
+fun apply_gravity(dt) {
+ // | | | | | | | | | | 
+  if (player.on_ground == false) {
+   // | | | | | | | | | | | | |  | 
+    player.vel_y = player.vel_y + gravity * dt
+  } //  | | | | | | | | | | | | | | | | | | |
+} // |   | | | | | | | | | |   | |   |   | |
+// | |    | | | | | | | | |     | | | | | | 
+// Store position for trail      |   |   |
+fun update_trail() { // | |       | | | |
+ // Only add trail  | |  | |       |   |
+  if (player.on_ground == false) { // |
+   // Add current position to trail  |
+    pos = prototype() //  | | | | | |
+    pos.x = player.x //    |   |   | 
+    pos.y = player.y //     | | | | 
+    push(trail, pos) //      |   |
+    // Limit trail length     | |
+    loop { //  | | | | |       |
+     // | | |   | | | |        | 
+      if (len(trail) <= trail_max) {
+       //  | | | | | | | | | | | | | 
+        break //  |   |   |   |   |
+      } // | | | | | | | | | | | |
+      // Remove oldest  | |   | |
+      trail = trail[1:] // | | |
+    } // |  | | | | | | | |   |
+  } // | |   | | | |   | | | |
+} // | | |    |   |     |   |
+// | | | |     | |       | |
+draw { //       |         |
+ // | | |       |         |
+  clear("#2d3436") //     |
+  // Draw ground | |      |
+  rect(0, ground_y, 600, 50, "#636e72")
+  // Draw trail when jumping | | | | |
+  if (len(trail) > 0) { // |  | | | |
+   // | | | | | | | | | | |    |   | 
+    i = 0 // | | | | | | |      | |
+    loop { //   | |   | |        | 
+     // | | |    | | | |         |
+      if (i >= len(trail)) { // |
+       // | | | | | | | | | | | |
+        break // | | | | | | | |
+      } //  | | | | | | | | | |
+      pos = trail[i] //| | | |
+      // Cosine alpha falloff
+      t = i / trail_max // |
+      alpha = cos(t * 1.5708) * 0.6
+      // Cyan trail with alpha | | |
+      rect(pos.x, pos.y, 32, 32, "#00cec9", alpha)
+      i = i + 1 //  | | | | | | | | | | | | | | |
+    } //   | | | | | | | | | | | | | | | | | | |
+  } //  | | | | | | | | | | | | | | | | | | | |
+  // Draw player | | | | | | | | | | | | | | |
+  rect(player.x, player.y, 32, 32, "#00cec9")
+  // Instructions  | | | | | | | | | | | | | | |
+  text("Arrows/WASD to move, Space to jump", 10, 30, 16, "#dfe6e9")
+} //  | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
+// |   | | | | | | | |   | | | | | |   | | | | | |   |   |   |   |
+update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
+ //  | | | | | | | |       | | | |       | | | |       |   |   |  
+  // Apply gravity  |       |   |         |   |         | | | |
+  apply_gravity(dt) //       | |           | |           |   | 
+  // Left/right movement      |             |             | |
+  if (key_held("ArrowLeft")) { //           |              |
+   // | | | | | | | | | | | | | |           |              |
+    player.x = player.x - move_speed * dt //               |
+  } // |  | | | | | | | | | | | | | | | | |                |
+  if (key_held("ArrowRight")) { // | | | |                 |
+   // | | | | | | | | | | | | | | | | | |                  |
+    player.x = player.x + move_speed * dt //               |
+  } //  | | | | | | | | | | | | | | | | | |                |
+  if (key_held("a")) { //  | | | | | | | |                 |
+   // | | | | | | | | | | | | | | | | | |                  |
+    player.x = player.x - move_speed * dt //               |
+  } //  | | | | | | | | | | | | | | | | | |                |
+  if (key_held("d")) { //  | | | | | | | |                 |
+   // | | | | | | | | | | | | | | | | | |                  |
+    player.x = player.x + move_speed * dt //               |
+  } //  | | | | | | | | | | | | | | | | | |                |
+  // Jump  | |   |   |   | |   | | | | | |                 |
+  if (pressed("jump")) { //     |   |   |                  |
+   //  | | | | | | | | | |       | | | |                   |
+    if (player.on_ground) { //    |   |                    |
+     //  | | | | | | | | | | |     | |                     |
+      player.vel_y = jump_force //  |                      | 
+      player.on_ground = false //   |                      | 
+      // Clear trail on new jump    |                      | 
+      trail = [] //   | | | | |     |                      | 
+    } //| | | | | |    | | | |      |                      | 
+  } // | | | | | |      |   |       |                      | 
+  // Update trail        | |        |                      | 
+  update_trail() //       |         |                      | 
+  // Update vertical      |         |                      |
+  player.y = player.y + player.vel_y * dt //               |
+  // Keep player in bounds  | | | | | | | |                |
+  if (player.x < 0) { // | |   | | | | | |                 |
+   // | | | | | | | | | | |     |   |   |                  |
+    player.x = 0 // | | | |      | | | |                   |
+  } // | | | | | | | | | |        |   |                    |
+  if (player.x > 568) { //         | |                     |
+   //  | | | | | | | | | |          |                      |
+    player.x = 568 // | |          |                       |
+  } // | | | | | | | | |          |                        |
+  // Ground collision  |         |                         |
+  if (player.y > ground_y - 32) { //                       |
+   // | | | | | | | | | | | | | | |                        |
+    player.y = ground_y - 32 //| |                         |
+    player.vel_y = 0 // | | | | |                          |
+    player.on_ground = true // |                           |
+    // Clear trail on landing |                            |
+    trail = [] //  | | | | | |                             |
+  } //  | | | | | | | | | | |                              |
+} // | | | | | | | | | | | |                               |
+###########################                                #`
+    };
+
+    // DOM Elements
+    const editor = document.getElementById('editor');
+    const processedView = document.getElementById('processed');
+    const consoleEl = document.getElementById('console');
+    const canvas = document.getElementById('game-canvas');
+    const runBtn = document.getElementById('run-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const tabs = document.querySelectorAll('.tab');
+    const lineNumbers = document.getElementById('source-line-numbers');
+    const exampleSelect = document.getElementById('example-select');
+    const loadingOverlay = document.getElementById('loading');
+
+    let ragelang = null;
+    let currentTab = 'source';
+
+    // Import Ragelang from local bundle
+    import { Ragelang, FallingProcessor } from '{{ "/assets/js/ragelang.bundle.js" | relative_url }}';
+    
+    // Hide loading overlay once module is loaded
+    loadingOverlay.classList.add('hidden');
+
+    function loadExample(name) {
+      if (EXAMPLES[name]) {
+        editor.value = EXAMPLES[name];
+        updateLineNumbers(editor.value);
+        stop();
+        clearConsole();
+      }
+    }
+
+    function updateLineNumbers(text) {
+      const lines = text.split('\n');
+      lineNumbers.innerHTML = lines.map((_, i) => 
+        `<span class="line-num">${i + 1}</span>`
+      ).join('');
+    }
+
+    function log(message, type = 'info') {
+      const line = document.createElement('div');
+      line.className = `console-line ${type}`;
+      line.textContent = message;
+      consoleEl.appendChild(line);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+
+    function clearConsole() {
+      consoleEl.innerHTML = '';
+    }
+
+    // Override console.log to capture output
+    const originalLog = console.log;
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      log(args.join(' '));
+    };
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function updateProcessedView() {
+      try {
+        const source = editor.value;
+        const processor = new FallingProcessor(source);
+        
+        const sourceLines = source.split('\n');
+        const processed = processor.process();
+        
+        if (!processed) {
+          processedView.innerHTML = '<span style="color: var(--text-muted)">(empty - no foundation found)</span>';
+          updateLineNumbers('');
+          return;
+        }
+
+        const processedLines = processed.split('\n');
+        const fallenPositions = new Set();
+        
+        for (let row = 0; row < processedLines.length; row++) {
+          for (let col = 0; col < processedLines[row].length; col++) {
+            const char = processedLines[row][col];
+            if (char !== ' ') {
+              const key = `${row},${col}`;
+              const originalChar = sourceLines[row]?.[col];
+              if (originalChar !== char) {
+                fallenPositions.add(key);
+              }
+            }
+          }
+        }
+        
+        let html = '';
+        for (let row = 0; row < processedLines.length; row++) {
+          const line = processedLines[row];
+          for (let col = 0; col < line.length; col++) {
+            const char = line[col];
+            const key = `${row},${col}`;
+            if (fallenPositions.has(key) && char !== ' ') {
+              html += `<span class="fallen-char">${escapeHtml(char)}</span>`;
+            } else {
+              html += escapeHtml(char);
+            }
+          }
+          html += '\n';
+        }
+        
+        processedView.innerHTML = html;
+        updateLineNumbers(processed);
+      } catch (e) {
+        processedView.innerHTML = `<span style="color: var(--accent-coral)">Error: ${escapeHtml(e.message)}</span>`;
+      }
+    }
+
+    function run() {
+      stop();
+      clearConsole();
+      
+      try {
+        ragelang = new Ragelang({ canvas, width: 600, height: 400 });
+        log('Running Ragelang program...', 'success');
+        ragelang.run(editor.value);
+        ragelang.start();
+        updateProcessedView();
+      } catch (e) {
+        log(`Error: ${e.message}`, 'error');
+        console.error(e);
+      }
+    }
+
+    function stop() {
+      if (ragelang) {
+        ragelang.stop();
+        ragelang = null;
+      }
+    }
+
+    // Event Listeners
+    editor.addEventListener('scroll', () => {
+      lineNumbers.scrollTop = editor.scrollTop;
+    });
+
+    editor.addEventListener('input', () => {
+      if (currentTab === 'source') {
+        updateLineNumbers(editor.value);
+      }
+      // Mark as custom when user edits
+      if (!Object.values(EXAMPLES).includes(editor.value)) {
+        exampleSelect.value = 'custom';
+      }
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        currentTab = tab.dataset.tab;
+        if (currentTab === 'source') {
+          editor.style.display = 'block';
+          processedView.classList.remove('visible');
+          updateLineNumbers(editor.value);
+        } else {
+          editor.style.display = 'none';
+          processedView.classList.add('visible');
+          updateProcessedView();
+        }
+      });
+    });
+
+    exampleSelect.addEventListener('change', (e) => {
+      const value = e.target.value;
+      if (value !== 'custom') {
+        loadExample(value);
+      }
+    });
+
+    runBtn.addEventListener('click', run);
+    stopBtn.addEventListener('click', stop);
+    clearBtn.addEventListener('click', () => {
+      editor.value = '';
+      stop();
+      clearConsole();
+      updateLineNumbers('');
+      exampleSelect.value = 'custom';
+    });
+
+    // Handle keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ctrl/Cmd + Enter to run
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        run();
+      }
+    });
+
+    // Load initial example
+    loadExample('bouncing-ball');
+  </script>
+</body>
+</html>
+
