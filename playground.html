@@ -428,7 +428,13 @@ update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
 
   exampleSelect.addEventListener('change', (e) => {
     const value = e.target.value;
-    if (value !== 'custom') {
+    if (value === 'custom') {
+      // Clear editor for custom code
+      editor.value = '';
+      stop();
+      clearConsole();
+      updateLineNumbers('');
+    } else {
       loadExample(value);
     }
   });
