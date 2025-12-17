@@ -57,10 +57,10 @@ Use # to create the foundation." spellcheck="false"></textarea>
   </div>
 </div>
 
-<script type="module">
-  // Import Ragelang from CDN
-  import * as RagelangLib from 'https://unpkg.com/ragelang/dist/ragelang.bundle.js';
-  const { Ragelang, FallingProcessor } = RagelangLib;
+<script src="https://unpkg.com/ragelang/dist/ragelang.bundle.js"></script>
+<script>
+  // Get Ragelang from the global (IIFE bundle)
+  const { Ragelang, FallingProcessor } = window.RagelangLib;
 
   // Example programs
   const EXAMPLES = {
