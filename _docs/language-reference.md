@@ -149,6 +149,12 @@ Variables can be reassigned:
 ```rage
 score = 0
 score = score + 10
+
+// Or use compound assignment
+score += 10
+
+// Or increment/decrement
+score++
 ```
 
 ---
@@ -204,6 +210,81 @@ score = score + 10
 | `!` | Logical NOT | `!true` → `false` |
 | `~` | Bitwise NOT | `~0` → `-1` |
 
+### Compound Assignment Operators
+
+Compound assignment operators combine an operation with assignment:
+
+| Operator | Description | Equivalent To |
+|----------|-------------|---------------|
+| `+=` | Add and assign | `x = x + y` |
+| `-=` | Subtract and assign | `x = x - y` |
+| `*=` | Multiply and assign | `x = x * y` |
+| `/=` | Divide and assign | `x = x / y` |
+| `%=` | Modulo and assign | `x = x % y` |
+| `&=` | Bitwise AND and assign | `x = x & y` |
+| `\|=` | Bitwise OR and assign | `x = x \| y` |
+| `^=` | Bitwise XOR and assign | `x = x ^ y` |
+
+```rage
+score = 0
+score += 10    // score is now 10
+score *= 2     // score is now 20
+
+health = 100
+health -= 25   // health is now 75
+
+// Works with strings too
+message = "Hello"
+message += " World"  // message is now "Hello World"
+
+// Works with object properties
+player.x += speed * dt
+player.health -= damage
+
+// Works with array elements
+inventory[0] += 1
+```
+
+### Increment and Decrement Operators
+
+Increment and decrement operators add or subtract 1 from a variable:
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `++` | Increment by 1 | `x++` or `++x` |
+| `--` | Decrement by 1 | `x--` or `--x` |
+
+**Prefix vs Postfix:**
+- **Prefix** (`++x`): Increments first, then returns the new value
+- **Postfix** (`x++`): Returns the current value, then increments
+
+```rage
+x = 5
+
+// Postfix: returns old value, then increments
+y = x++    // y is 5, x is now 6
+
+// Prefix: increments first, then returns new value
+z = ++x    // x is now 7, z is 7
+
+// Common use in loops
+i = 0
+loop {
+  if (i >= 10) {
+    break
+  }
+  print(i)
+  i++  // Same as i = i + 1
+}
+
+// Works with object properties
+player.score++
+enemy.health--
+
+// Works with array elements
+counts[index]++
+```
+
 ---
 
 ## Control Flow
@@ -249,7 +330,7 @@ loop {
     break
   }
   // Do something
-  count = count + 1
+  count++
 }
 ```
 
@@ -262,7 +343,7 @@ loop {
     break
   }
   print(items[i])
-  i = i + 1
+  i++
 }
 ```
 

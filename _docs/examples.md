@@ -54,7 +54,7 @@ draw {
 }
 
 update(dt) {
-    time = time + 1
+    time++
 }
 ```
 
@@ -133,7 +133,7 @@ trail_max = 8
 // Apply gravity to player
 fun apply_gravity(dt) {
   if (player.on_ground == false) {
-    player.vel_y = player.vel_y + gravity * dt
+    player.vel_y += gravity * dt
   }
 }
 
@@ -172,7 +172,7 @@ draw {
       t = i / trail_max
       alpha = cos(t * 1.5708) * 0.6
       rect(pos.x, pos.y, 32, 32, "#00cec9", alpha)
-      i = i + 1
+      i++
     }
   }
   
@@ -188,10 +188,10 @@ update(dt) {
   
   // Horizontal movement
   if (key_held("ArrowLeft") or key_held("a")) {
-    player.x = player.x - move_speed * dt
+    player.x -= move_speed * dt
   }
   if (key_held("ArrowRight") or key_held("d")) {
-    player.x = player.x + move_speed * dt
+    player.x += move_speed * dt
   }
   
   // Jump
@@ -204,7 +204,7 @@ update(dt) {
   update_trail()
   
   // Apply vertical velocity
-  player.y = player.y + player.vel_y * dt
+  player.y += player.vel_y * dt
   
   // Keep in bounds horizontally
   if (player.x < 0) {
@@ -254,7 +254,7 @@ fun spawn_burst(x, y, count) {
       break
     }
     spawn_particle(x, y)
-    i = i + 1
+    i++
   }
 }
 
@@ -271,7 +271,7 @@ draw {
     color = hsla(p.color_h, 80, 60, p.life)
     size = 4 + p.life * 8
     circle(p.x, p.y, size, color)
-    i = i + 1
+    i++
   }
   
   text("Click to spawn particles!", 150, 30, 20, "#ffffff")
@@ -294,12 +294,12 @@ update(dt) {
     p = particles[i]
     
     // Apply physics
-    p.x = p.x + p.vel_x * dt
-    p.y = p.y + p.vel_y * dt
-    p.vel_y = p.vel_y + gravity * dt
+    p.x += p.vel_x * dt
+    p.y += p.vel_y * dt
+    p.vel_y += gravity * dt
     
     // Decay life
-    p.life = p.life - dt * 0.8
+    p.life -= dt * 0.8
     
     // Remove dead particles
     if (p.life <= 0) {
@@ -307,7 +307,7 @@ update(dt) {
       particles[i] = particles[len(particles) - 1]
       pop(particles)
     } else {
-      i = i + 1
+      i++
     }
   }
 }
@@ -350,7 +350,7 @@ draw {
       text(menu_items[i], 220, y, 20, "#888888")
     }
     
-    i = i + 1
+    i++
   }
   
   // Instructions
@@ -360,7 +360,7 @@ draw {
 update(dt) {
   // Navigate up
   if (key_pressed("ArrowUp") or key_pressed("w")) {
-    selected = selected - 1
+    selected--
     if (selected < 0) {
       selected = len(menu_items) - 1
     }
@@ -368,7 +368,7 @@ update(dt) {
   
   // Navigate down
   if (key_pressed("ArrowDown") or key_pressed("s")) {
-    selected = selected + 1
+    selected++
     if (selected >= len(menu_items)) {
       selected = 0
     }
@@ -413,7 +413,7 @@ draw {
     }
     o = obstacles[i]
     rect(o.x, o.y, o.w, o.h, o.color)
-    i = i + 1
+    i++
   }
   
   // Draw player
@@ -435,16 +435,16 @@ draw {
 update(dt) {
   // Movement
   if (held("left")) {
-    player.x = player.x - speed * dt
+    player.x -= speed * dt
   }
   if (held("right")) {
-    player.x = player.x + speed * dt
+    player.x += speed * dt
   }
   if (held("up")) {
-    player.y = player.y - speed * dt
+    player.y -= speed * dt
   }
   if (held("down")) {
-    player.y = player.y + speed * dt
+    player.y += speed * dt
   }
   
   // Check collisions
@@ -462,7 +462,7 @@ update(dt) {
       break
     }
     
-    i = i + 1
+    i++
   }
 }
 ```
@@ -523,7 +523,7 @@ draw {
 }
 
 update(dt) {
-  state_time = state_time + dt
+  state_time += dt
   
   // State changes via keyboard
   if (key_pressed("i")) {
@@ -546,7 +546,7 @@ update(dt) {
   // Process current state
   match state {
     Walking(speed) => {
-      player_x = player_x + speed * dt
+      player_x += speed * dt
       if (player_x > 550) {
         player_x = 50
       }
@@ -585,7 +585,7 @@ draw {
     y = 200 + sin(angle) * 100
     hue = (i * 30 + t * 50) % 360
     circle(x, y, 20, hsl(hue, 80, 60))
-    i = i + 1
+    i++
   }
 }
 ```
@@ -656,7 +656,7 @@ draw {
     size = s.z
     alpha = s.brightness * (0.5 + sin(time() * 2 + i) * 0.5)
     circle(s.x, s.y, size, rgba(255, 255, 255, alpha))
-    i = i + 1
+    i++
   }
 }
 
@@ -668,7 +668,7 @@ update(dt) {
       break
     }
     s = stars[i]
-    s.x = s.x - s.z * 50 * dt
+    s.x -= s.z * 50 * dt
     
     // Wrap around
     if (s.x < 0) {
@@ -676,7 +676,7 @@ update(dt) {
       s.y = randomInt(0, 400)
     }
     
-    i = i + 1
+    i++
   }
 }
 ```
