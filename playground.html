@@ -12,24 +12,23 @@ permalink: /playground/
 <div class="playground-main">
   <div class="playground-panel">
     <div class="panel-header">
-      <div class="panel-header-left">
-        <div class="playground-tabs">
-          <button class="playground-tab active" data-tab="source">Source</button>
-          <button class="playground-tab" data-tab="processed">Processed</button>
-        </div>
-        <div class="example-selector">
-          <select id="example-select">
-            <option value="bouncing-ball">Bouncing Ball</option>
-            <option value="platformer">Platformer</option>
-            <option value="hello-world">Hello World</option>
-            <option value="custom">Custom</option>
-          </select>
-        </div>
+      <div class="playground-tabs">
+        <button class="playground-tab active" data-tab="source">Source</button>
+        <button class="playground-tab" data-tab="processed">Processed</button>
       </div>
       <div class="btn-group">
         <button class="btn btn-secondary" id="clear-btn">Clear</button>
         <button class="btn btn-primary" id="run-btn">▶ Run</button>
       </div>
+    </div>
+    <div class="panel-subheader">
+      <label for="example-select">Example:</label>
+      <select id="example-select">
+        <option value="bouncing-ball">Bouncing Ball</option>
+        <option value="platformer">Platformer</option>
+        <option value="hello-world">Hello World</option>
+        <option value="custom">Custom</option>
+      </select>
     </div>
     <div class="code-editor">
       <div class="line-numbers" id="source-line-numbers"></div>
