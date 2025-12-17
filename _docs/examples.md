@@ -9,6 +9,13 @@ order: 3
 
 This page contains example programs demonstrating various features of Ragelang. Use these as learning resources or starting points for your own projects.
 
+
+## Note
+
+Not human review or tested.
+
+Additionally, the examples don't have supports, so they won't run in the current state.
+
 ## Table of Contents
 
 - [Hello World](#hello-world)
@@ -35,14 +42,19 @@ draw {
 With animation:
 
 ```rage
+time = 0
 draw {
   clear("#1a1a2e")
   
   // Animated color using time
-  hue = (time() * 50) % 360
+  hue = (time * 50) % 360
   color = hsl(hue, 80, 60)
   
   text("Hello, Ragelang!", 150, 200, 36, color)
+}
+
+update(dt) {
+    time = time + 1
 }
 ```
 
@@ -668,15 +680,3 @@ update(dt) {
   }
 }
 ```
-
----
-
-## Tips for Writing Ragelang
-
-1. **Always multiply by `dt`** - For consistent speed regardless of frame rate
-2. **Use prototypes for game objects** - Keep related data together
-3. **Break code into functions** - Makes your code more readable
-4. **Use arrays for collections** - Enemies, particles, projectiles, etc.
-5. **Keep draw and update separate** - Logic in update, rendering in draw
-
-Happy coding!

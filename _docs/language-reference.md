@@ -9,6 +9,10 @@ order: 2
 
 This document provides a complete reference for the Ragelang programming language, including all built-in functions, control flow structures, and language features.
 
+## Note
+
+Not human reviewed for accuracy
+
 ## Table of Contents
 
 - [Basic Syntax](#basic-syntax)
@@ -996,15 +1000,6 @@ Print values to the console (for debugging).
 ```rage
 print("Player position:", player.x, player.y)
 print("Score:", score)
-```
-
-#### `time()`
-Get current time in seconds (from page load).
-
-```rage
-t = time()
-// Useful for animations
-wave = sin(time() * 2) * 50
 ```
 
 ---
