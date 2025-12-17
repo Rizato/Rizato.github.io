@@ -57,7 +57,11 @@ Use # to create the foundation." spellcheck="false"></textarea>
   </div>
 </div>
 
-<script type="module">
+<script src="https://unpkg.com/ragelang/dist/ragelang.bundle.js"></script>
+<script>
+  // Get Ragelang classes from global
+  const { Ragelang, FallingProcessor } = window.RagelangLib;
+
   // Example programs
   const EXAMPLES = {
     'hello-world': `//         to RageLang!
@@ -265,10 +269,7 @@ update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
   let ragelang = null;
   let currentTab = 'source';
 
-  // Import Ragelang from local bundle
-  import { Ragelang, FallingProcessor } from '{{ "/assets/js/ragelang.bundle.js" | relative_url }}';
-  
-  // Hide loading overlay once module is loaded
+  // Hide loading overlay once bundle is loaded
   loadingOverlay.classList.add('hidden');
 
   function loadExample(name) {
