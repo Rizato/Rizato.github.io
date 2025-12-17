@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#12131a"/>
+      <stop offset="100%" style="stop-color:#1a1c25"/>
+    </linearGradient>
+    <linearGradient id="fire-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e89b4a"/>
+      <stop offset="50%" style="stop-color:#f06543"/>
+      <stop offset="100%" style="stop-color:#e85d75"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e89b4a;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#e89b4a;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg-gradient)"/>
+  
+  <!-- Decorative glow -->
+  <ellipse cx="200" cy="150" rx="300" ry="200" fill="url(#glow)"/>
+  <ellipse cx="1000" cy="500" rx="250" ry="180" fill="url(#glow)"/>
+  
+  <!-- Code window mockup -->
+  <g transform="translate(80, 180)">
+    <!-- Window frame -->
+    <rect width="500" height="300" rx="12" fill="#1a1c25" stroke="#2a2a3a" stroke-width="2"/>
+    
+    <!-- Title bar -->
+    <rect width="500" height="40" rx="12" fill="#262a38"/>
+    <rect y="28" width="500" height="12" fill="#262a38"/>
+    
+    <!-- Traffic lights -->
+    <circle cx="24" cy="20" r="6" fill="#f06543"/>
+    <circle cx="44" cy="20" r="6" fill="#d4c07a"/>
+    <circle cx="64" cy="20" r="6" fill="#5cc98c"/>
+    
+    <!-- Code lines -->
+    <text x="24" y="75" fill="#5c6178" font-family="monospace" font-size="14">// Ragelang code</text>
+    <text x="24" y="100" fill="#e85d75" font-family="monospace" font-size="14">draw</text>
+    <text x="60" y="100" fill="#e4e6ed" font-family="monospace" font-size="14"> {</text>
+    <text x="40" y="125" fill="#3fc1b0" font-family="monospace" font-size="14">clear</text>
+    <text x="80" y="125" fill="#e4e6ed" font-family="monospace" font-size="14">(</text>
+    <text x="90" y="125" fill="#d4c07a" font-family="monospace" font-size="14">"#1a1a2e"</text>
+    <text x="180" y="125" fill="#e4e6ed" font-family="monospace" font-size="14">)</text>
+    <text x="40" y="150" fill="#3fc1b0" font-family="monospace" font-size="14">circle</text>
+    <text x="95" y="150" fill="#e4e6ed" font-family="monospace" font-size="14">(x, y, 20,</text>
+    <text x="195" y="150" fill="#d4c07a" font-family="monospace" font-size="14">"#ff3366"</text>
+    <text x="280" y="150" fill="#e4e6ed" font-family="monospace" font-size="14">)</text>
+    <text x="24" y="175" fill="#e4e6ed" font-family="monospace" font-size="14">}</text>
+    <text x="24" y="210" fill="#5c6178" font-family="monospace" font-size="14">##################</text>
+  </g>
+  
+  <!-- Canvas mockup -->
+  <g transform="translate(620, 180)">
+    <rect width="500" height="300" rx="12" fill="#000" stroke="#2a2a3a" stroke-width="2"/>
+    
+    <!-- Bouncing ball -->
+    <circle cx="250" cy="150" r="30" fill="#ff3366"/>
+    
+    <!-- Some game elements -->
+    <rect x="50" y="220" width="80" height="40" fill="#00cec9" rx="4"/>
+    <rect x="370" y="220" width="80" height="40" fill="#00cec9" rx="4"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="600" y="90" text-anchor="middle" fill="url(#fire-gradient)" font-family="system-ui, sans-serif" font-size="72" font-weight="700">🔥 Ragelang</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="550" text-anchor="middle" fill="#8b90a5" font-family="system-ui, sans-serif" font-size="28">Try the interactive playground in your browser</text>
+  
+  <!-- Badge -->
+  <rect x="480" y="570" width="240" height="36" rx="18" fill="#262a38" stroke="#3a3a4a" stroke-width="1"/>
+  <text x="600" y="595" text-anchor="middle" fill="#3fc1b0" font-family="system-ui, sans-serif" font-size="16" font-weight="500">Langjam Gamejam 2025</text>
+</svg>
+
