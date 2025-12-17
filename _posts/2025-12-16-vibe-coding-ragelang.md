@@ -12,7 +12,7 @@ Vibe coding is using a coding agent to write the code instead of doing it myself
 It’s fast, handles languages I’m not experienced with, and can bypass the steep learning curve.
 
 I didn’t think I could finish Ragelang on time solo, but vibe coding let me implement the entire language in a day. 
-I’ve built a language as part of a team, [Rundown](https://github.com/mjkoo/rundown), for a Langjam, but that was four years ago and I’ve likely forgotten most of it.
+I’ve built a language as part of a team, [Rundown](https://github.com/mjkoo/rundown), for a Langjam, but that was four years ago, and I’ve likely forgotten most of it.
 I completely skipped relearning how to build a language, AST, etc. 
 
 I also skipped learning TypeScript. I’ve worked on existing TypeScript code bases, but creating a project from scratch was a different challenge. I wanted the game in TypeScript so it would run in the browser; requiring a download in past jams meant fewer people tried it.
