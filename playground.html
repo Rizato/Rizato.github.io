@@ -24,9 +24,6 @@ permalink: /playground/
     <div class="panel-subheader">
       <label for="example-select">Example:</label>
       <select id="example-select">
-        <option value="bouncing-ball">Bouncing Ball</option>
-        <option value="platformer">Platformer</option>
-        <option value="hello-world">Hello World</option>
         <option value="custom">Custom</option>
       </select>
     </div>
@@ -57,202 +54,30 @@ Use # to create the foundation." spellcheck="false"></textarea>
   </div>
 </div>
 
-<script type="module" src="https://unpkg.com/ragelang/dist/ragelang.bundle.min.js"></script>
+<script src="https://unpkg.com/ragelang/dist/ragelang.bundle.min.js"></script>
 <!-- <script src="/assets/js/ragelang.bundle.js"></script> -->
 <script>
   // Get Ragelang from the global (IIFE bundle)
   const { Ragelang, FallingProcessor } = window.RagelangLib;
 
-  // Example programs
-  const EXAMPLES = {
-    'hello-world': `//         to RageLang!
-// Welcome  | | | | |
-// | | | |   | | | |
-// Author:    Rizato
-print("Hello, World! ")
-// | | | | |         |
-######################`,
+  // Known example files in assets/rage
+  // Since we can't list files from a static server, we maintain this list
+  const EXAMPLE_FILES = [
+    'animation',
+    'bouncing-ball',
+    'collision',
+    'hello-world',
+    'menu',
+    'mouse',
+    'particles',
+    'pattern',
+    'platformer',
+    'rainbow',
+    'starfield'
+  ];
 
-    'bouncing-ball': `// A simple bouncing ball demo
-// | | | | | | | | | | | | | |
-//  | | | | | |   | | | | | |
-ball_x = 300 //    | | | | |
-ball_y = 200 //     | | | |
-vel_x = 150 //       | | |
-vel_y = 100 //        | |
-draw { // | |          |
- // | | | | |          |
-  clear("#1a1a2e") //  |
-  circle(ball_x, ball_y, 20, "#ff3366")
-  text("Bouncing Ball", 10, 30, 24, "#ffffff")
-} //  | | | | | | | | | | | | | | | | | | | |
-// | | | | | | | | | | | | | |   | | | | | |
-update(dt) { // | | | | | | | |   | | | | |
- // | | | | | | | | | | | | | |    | | | | 
-  ball_x = ball_x + vel_x * dt //   | | |
-  ball_y = ball_y + vel_y * dt //    | |
-  // | | | | | | | | | | | | | |      |
-  if (ball_x > 580) { //  | | |       |
-  // | | | | | | | | | |   | |       |
-   // | | | | | | | | |     |       |
-    vel_x = -150 // | |      |     |
-  } // | | | | | | | |        |   |
-  if (ball_x < 20) { //        | |
-   // | | | | | | | | |         | 
-    // | | | | | | | |         |
-    vel_x = 150 // | |        |
-  } // | | | | | | | |       |
-  if (ball_y > 380) { //    |
-   // | | | | | | | | |    |
-    // | | | | | | | |    |
-    vel_y = -100 // |    |
-  } // | | | | | | |    |
-  if (ball_y < 20) { //|
-   // | | | | | | | | |
-    // | | | | | | | |
-    vel_y = 100 //| |
-  } // | | | | | | |
-} //  | | | | | | | 
-// | | | | | | | | 
-##################`,
-
-    'platformer': `// Simple platformer with controls
-//  | | | | | | | | | | | | | | |
-//   | | | | | | | | | |   |   |
-player = prototype() //     | |
-player.x = 100 //  | |       |
-player.y = 300 //   |       |
-player.vel_y = 0 // |      |
-player.on_ground = true //|
-//  | | | | | | | | | | | |
-gravity = 800 //   |   | |
-jump_force = -400 //    |
-move_speed = 200 //     |
-// | | | | | | | |      |
-ground_y = 350 //       |
-// | | | | | | |        |
-// Trail system         |
-trail = [] //  |        |
-trail_max = 8 //        |
-//  | | | | | |         |
-// Helper function     |
-fun apply_gravity(dt) {
- // | | | | | | | | | | 
-  if (player.on_ground == false) {
-   // | | | | | | | | | | | | |  | 
-    player.vel_y = player.vel_y + gravity * dt
-  } //  | | | | | | | | | | | | | | | | | | |
-} // |   | | | | | | | | | |   | |   |   | |
-// | |    | | | | | | | | |     | | | | | | 
-// Store position for trail      |   |   |
-fun update_trail() { // | |       | | | |
- // Only add trail  | |  | |       |   |
-  if (player.on_ground == false) { // |
-   // Add current position to trail  |
-    pos = prototype() //  | | | | | |
-    pos.x = player.x //    |   |   | 
-    pos.y = player.y //     | | | | 
-    push(trail, pos) //      |   |
-    // Limit trail length     | |
-    loop { //  | | | | |       |
-     // | | |   | | | |        | 
-      if (len(trail) <= trail_max) {
-       //  | | | | | | | | | | | | | 
-        break //  |   |   |   |   |
-      } // | | | | | | | | | | | |
-      // Remove oldest  | |   | |
-      trail = trail[1:] // | | |
-    } // |  | | | | | | | |   |
-  } // | |   | | | |   | | | |
-} // | | |    |   |     |   |
-// | | | |     | |       | |
-draw { //       |         |
- // | | |       |         |
-  clear("#2d3436") //     |
-  // Draw ground | |      |
-  rect(0, ground_y, 600, 50, "#636e72")
-  // Draw trail when jumping | | | | |
-  if (len(trail) > 0) { // |  | | | |
-   // | | | | | | | | | | |    |   | 
-    i = 0 // | | | | | | |      | |
-    loop { //   | |   | |        | 
-     // | | |    | | | |         |
-      if (i >= len(trail)) { // |
-       // | | | | | | | | | | | |
-        break // | | | | | | | |
-      } //  | | | | | | | | | |
-      pos = trail[i] //| | | |
-      // Cosine alpha falloff
-      t = i / trail_max // |
-      alpha = cos(t * 1.5708) * 0.6
-      // Cyan trail with alpha | | |
-      rect(pos.x, pos.y, 32, 32, "#00cec9", alpha)
-      i = i + 1 //  | | | | | | | | | | | | | | |
-    } //   | | | | | | | | | | | | | | | | | | |
-  } //  | | | | | | | | | | | | | | | | | | | |
-  // Draw player | | | | | | | | | | | | | | |
-  rect(player.x, player.y, 32, 32, "#00cec9")
-  // Instructions  | | | | | | | | | | | | | | |
-  text("Arrows/WASD to move, Space to jump", 10, 30, 16, "#dfe6e9")
-} //  | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
-// |   | | | | | | | |   | | | | | |   | | | | | |   |   |   |   |
-update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
- //  | | | | | | | |       | | | |       | | | |       |   |   |  
-  // Apply gravity  |       |   |         |   |         | | | |
-  apply_gravity(dt) //       | |           | |           |   | 
-  // Left/right movement      |             |             | |
-  if (key_held("ArrowLeft")) { //           |              |
-   // | | | | | | | | | | | | | |           |              |
-    player.x = player.x - move_speed * dt //               |
-  } // |  | | | | | | | | | | | | | | | | |                |
-  if (key_held("ArrowRight")) { // | | | |                 |
-   // | | | | | | | | | | | | | | | | | |                  |
-    player.x = player.x + move_speed * dt //               |
-  } //  | | | | | | | | | | | | | | | | | |                |
-  if (key_held("a")) { //  | | | | | | | |                 |
-   // | | | | | | | | | | | | | | | | | |                  |
-    player.x = player.x - move_speed * dt //               |
-  } //  | | | | | | | | | | | | | | | | | |                |
-  if (key_held("d")) { //  | | | | | | | |                 |
-   // | | | | | | | | | | | | | | | | | |                  |
-    player.x = player.x + move_speed * dt //               |
-  } //  | | | | | | | | | | | | | | | | | |                |
-  // Jump  | |   |   |   | |   | | | | | |                 |
-  if (pressed("jump")) { //     |   |   |                  |
-   //  | | | | | | | | | |       | | | |                   |
-    if (player.on_ground) { //    |   |                    |
-     //  | | | | | | | | | | |     | |                     |
-      player.vel_y = jump_force //  |                      | 
-      player.on_ground = false //   |                      | 
-      // Clear trail on new jump    |                      | 
-      trail = [] //   | | | | |     |                      | 
-    } //| | | | | |    | | | |      |                      | 
-  } // | | | | | |      |   |       |                      | 
-  // Update trail        | |        |                      | 
-  update_trail() //       |         |                      | 
-  // Update vertical      |         |                      |
-  player.y = player.y + player.vel_y * dt //               |
-  // Keep player in bounds  | | | | | | | |                |
-  if (player.x < 0) { // | |   | | | | | |                 |
-   // | | | | | | | | | | |     |   |   |                  |
-    player.x = 0 // | | | |      | | | |                   |
-  } // | | | | | | | | | |        |   |                    |
-  if (player.x > 568) { //         | |                     |
-   //  | | | | | | | | | |          |                      |
-    player.x = 568 // | |          |                       |
-  } // | | | | | | | | |          |                        |
-  // Ground collision  |         |                         |
-  if (player.y > ground_y - 32) { //                       |
-   // | | | | | | | | | | | | | | |                        |
-    player.y = ground_y - 32 //| |                         |
-    player.vel_y = 0 // | | | | |                          |
-    player.on_ground = true // |                           |
-    // Clear trail on landing |                            |
-    trail = [] //  | | | | | |                             |
-  } //  | | | | | | | | | | |                              |
-} // | | | | | | | | | | | |                               |
-###########################                                #`
-  };
+  // Cache for loaded examples
+  const loadedExamples = new Map();
 
   // DOM Elements
   const editor = document.getElementById('editor');
@@ -273,12 +98,61 @@ update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
   // Hide loading overlay once bundle is loaded
   loadingOverlay.classList.add('hidden');
 
-  function loadExample(name) {
-    if (EXAMPLES[name]) {
-      editor.value = EXAMPLES[name];
+  // Populate dropdown with available examples
+  function populateExamples() {
+    // Clear existing options except "custom"
+    while (exampleSelect.children.length > 1) {
+      exampleSelect.removeChild(exampleSelect.lastChild);
+    }
+    
+    // Add all example files
+    EXAMPLE_FILES.forEach(filename => {
+      const option = document.createElement('option');
+      option.value = filename;
+      // Convert kebab-case to Title Case
+      option.textContent = filename.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+      exampleSelect.appendChild(option);
+    });
+  }
+
+  // Fetch example code from assets/rage
+  async function loadExample(name) {
+    if (name === 'custom') {
+      return;
+    }
+
+    // Check cache first
+    if (loadedExamples.has(name)) {
+      editor.value = loadedExamples.get(name);
       updateLineNumbers(editor.value);
       stop();
       clearConsole();
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/assets/rage/${name}.rage`);
+      if (!response.ok) {
+        throw new Error(`Failed to load ${name}.rage: ${response.statusText}`);
+      }
+      const code = await response.text();
+      
+      // Cache the loaded code
+      loadedExamples.set(name, code);
+      
+      editor.value = code;
+      updateLineNumbers(editor.value);
+      stop();
+      clearConsole();
+    } catch (error) {
+      log(`Error loading example: ${error.message}`, 'error');
+      console.error(error);
+      // Restore original text
+      exampleSelect.options[exampleSelect.selectedIndex].textContent = originalText;
+      // Switch back to custom
+      exampleSelect.value = 'custom';
     }
   }
 
@@ -404,7 +278,16 @@ update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
       updateLineNumbers(editor.value);
     }
     // Mark as custom when user edits
-    if (!Object.values(EXAMPLES).includes(editor.value)) {
+    // Check if current value matches any cached example
+    let isExample = false;
+    for (const [name, code] of loadedExamples.entries()) {
+      if (editor.value === code) {
+        isExample = true;
+        exampleSelect.value = name;
+        break;
+      }
+    }
+    if (!isExample) {
       exampleSelect.value = 'custom';
     }
   });
@@ -427,7 +310,7 @@ update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
     });
   });
 
-  exampleSelect.addEventListener('change', (e) => {
+  exampleSelect.addEventListener('change', async (e) => {
     const value = e.target.value;
     if (value === 'custom') {
       // Clear editor for custom code
@@ -436,7 +319,7 @@ update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
       clearConsole();
       updateLineNumbers('');
     } else {
-      loadExample(value);
+      await loadExample(value);
     }
   });
 
@@ -466,6 +349,7 @@ update(dt) { // | | |     |   |   |     |   |   |     | | | | | |
     }
   });
 
-  // Load initial example
+  // Initialize: populate dropdown and load initial example
+  populateExamples();
   loadExample('bouncing-ball');
 </script>
