@@ -129,6 +129,7 @@ Use # to create the foundation." spellcheck="false"></textarea>
       updateLineNumbers(editor.value);
       stop();
       clearConsole();
+      exampleSelect.value = name;
       return;
     }
     
@@ -146,12 +147,11 @@ Use # to create the foundation." spellcheck="false"></textarea>
       updateLineNumbers(editor.value);
       stop();
       clearConsole();
+      exampleSelect.value = name;
     } catch (error) {
       log(`Error loading example: ${error.message}`, 'error');
       console.error(error);
-      // Restore original text
-      exampleSelect.options[exampleSelect.selectedIndex].textContent = originalText;
-      // Switch back to custom
+      // Switch back to custom on error
       exampleSelect.value = 'custom';
     }
   }
