@@ -9,10 +9,6 @@ order: 2
 
 This document provides a complete reference for the Ragelang programming language, including all built-in functions, control flow structures, and language features.
 
-## Note
-
-Not human reviewed for accuracy
-
 ## Table of Contents
 
 - [Basic Syntax](#basic-syntax)
@@ -23,6 +19,8 @@ Not human reviewed for accuracy
 - [Functions](#functions)
 - [Enums and Pattern Matching](#enums-and-pattern-matching)
 - [Built-in Functions](#built-in-functions)
+- [Canvas and Screen](#canvas-and-screen)
+- [Scene Management](#scene-management)
 
 ---
 
@@ -42,6 +40,7 @@ x = 10  // Inline comment
 A Ragelang program typically consists of:
 - Variable declarations
 - Function definitions
+- Enum definitions
 - A `draw` block (for rendering)
 - An `update` block (for game logic)
 
@@ -49,23 +48,22 @@ A Ragelang program typically consists of:
 // Variables
 player_x = 100
 player_y = 200
-
-// Functions
+// Functions .
 fun move_player(dx, dy) {
-  player_x = player_x + dx
-  player_y = player_y + dy
-}
-
+ player_x = player_x + dx
+ player_y = player_y + dy
+} // ...........................................
 // Draw block - called every frame for rendering
-draw {
-  clear("#000000")
-  circle(player_x, player_y, 20, "#ff0000")
-}
-
+draw { // ......................................
+ clear("#000000") // ...........................
+ circle(player_x, player_y, 20, "#ff0000") // ..
+} // ...............................................
 // Update block - called every frame with delta time
-update(dt) {
-  // Game logic here
-}
+update(dt) { // ....................................
+ // Game logic here ................................
+} //................................................
+// .................................................
+####################################################
 ```
 
 ---
@@ -187,8 +185,8 @@ score++
 
 | Operator | Description | Example |
 |----------|-------------|---------|
-| `and` / `&&` | Logical AND | `x > 0 and x < 10` |
-| `or` / `||` | Logical OR | `x < 0 or x > 10` |
+| `&&` | Logical AND | `x > 0 && x < 10` |
+| `||` | Logical OR | `x < 0 || x > 10` |
 | `!` | Logical NOT | `!is_jumping` |
 
 ### Bitwise Operators
@@ -212,8 +210,6 @@ score++
 
 ### Compound Assignment Operators
 
-Compound assignment operators combine an operation with assignment:
-
 | Operator | Description | Equivalent To |
 |----------|-------------|---------------|
 | `+=` | Add and assign | `x = x + y` |
@@ -225,29 +221,7 @@ Compound assignment operators combine an operation with assignment:
 | `\|=` | Bitwise OR and assign | `x = x \| y` |
 | `^=` | Bitwise XOR and assign | `x = x ^ y` |
 
-```rage
-score = 0
-score += 10    // score is now 10
-score *= 2     // score is now 20
-
-health = 100
-health -= 25   // health is now 75
-
-// Works with strings too
-message = "Hello"
-message += " World"  // message is now "Hello World"
-
-// Works with object properties
-player.x += speed * dt
-player.health -= damage
-
-// Works with array elements
-inventory[0] += 1
-```
-
 ### Increment and Decrement Operators
-
-Increment and decrement operators add or subtract 1 from a variable:
 
 | Operator | Description | Example |
 |----------|-------------|---------|
@@ -257,33 +231,6 @@ Increment and decrement operators add or subtract 1 from a variable:
 **Prefix vs Postfix:**
 - **Prefix** (`++x`): Increments first, then returns the new value
 - **Postfix** (`x++`): Returns the current value, then increments
-
-```rage
-x = 5
-
-// Postfix: returns old value, then increments
-y = x++    // y is 5, x is now 6
-
-// Prefix: increments first, then returns new value
-z = ++x    // x is now 7, z is 7
-
-// Common use in loops
-i = 0
-loop {
-  if (i >= 10) {
-    break
-  }
-  print(i)
-  i++  // Same as i = i + 1
-}
-
-// Works with object properties
-player.score++
-enemy.health--
-
-// Works with array elements
-counts[index]++
-```
 
 ---
 
@@ -295,115 +242,66 @@ Conditional execution with `if`, `else if`, and `else`:
 
 ```rage
 if (score > 100) {
-  text("High score!", 10, 10, 16, "#00ff00")
+ text("High score!", 10, 10, 16, "#00ff00")
 } else if (score > 50) {
-  text("Good job!", 10, 10, 16, "#ffff00")
+ text("Good score!", 10, 10, 16, "#ffff00")
 } else {
-  text("Keep trying!", 10, 10, 16, "#ff0000")
+ text("Keep trying!", 10, 10, 16, "#ffffff")
 }
 ```
 
-Conditions must be enclosed in parentheses, and blocks must use curly braces.
+### Loops
 
-### Loop
-
-The `loop` keyword creates an infinite loop. Use `break` to exit:
+#### Infinite Loop with Break
 
 ```rage
 i = 0
 loop {
-  if (i >= 10) {
-    break
-  }
-  print(i)
-  i = i + 1
+ if (i >= 10) {
+  break
+ }
+ print(i)
+ i++
 }
 ```
 
-#### Common Loop Patterns
+### Match Expressions
 
-**While-style loop:**
+Pattern matching with `match`:
+
 ```rage
-count = 0
-loop {
-  if (count >= 5) {
-    break
-  }
-  // Do something
-  count++
+result = match value {
+ 1 => "one",
+ 2 => "two",
+ _ => "other"
 }
 ```
 
-**For-each style (iterating over array):**
-```rage
-items = ["apple", "banana", "cherry"]
-i = 0
-loop {
-  if (i >= len(items)) {
-    break
-  }
-  print(items[i])
-  i++
-}
-```
-
-**Processing until condition:**
-```rage
-loop {
-  // Process something
-  if (done_condition) {
-    break
-  }
-}
-```
+See [Enums and Pattern Matching](#enums-and-pattern-matching) for more details.
 
 ---
 
 ## Functions
 
-### Defining Functions
-
-Use the `fun` keyword:
+Functions are defined with the `fun` keyword:
 
 ```rage
-fun greet(name) {
-  print("Hello, " + name)
-}
-
 fun add(a, b) {
-  return a + b
+ return a + b
 }
 
-fun create_enemy(x, y) {
-  enemy = prototype()
-  enemy.x = x
-  enemy.y = y
-  enemy.health = 100
-  return enemy
+result = add(5, 3)  // 8
+```
+
+Functions can have default parameters and keyword arguments:
+
+```rage
+fun greet(name, greeting = "Hello") {
+ return greeting + ", " + name
 }
-```
 
-### Calling Functions
-
-```rage
-greet("Player")
-result = add(5, 3)
-enemy = create_enemy(100, 200)
-```
-
-### Keyword Arguments
-
-Functions can be called with named (keyword) arguments:
-
-```rage
-// Positional arguments
-sprite("player.png", 100, 200, 32, 32)
-
-// Using keyword arguments for clarity
-sprite("player.png", 100, 200, width=64, height=64)
-
-// Keyword arguments can skip optional parameters
-text("Score: 100", 10, 10, color="#00ff00")
+greet("World")                    // "Hello, World"
+greet("World", greeting="Hi")     // "Hi, World"
 ```
 
 ---
@@ -417,18 +315,18 @@ Enums define a type with distinct variants:
 ```rage
 // Simple enum (unit variants)
 enum Direction {
-  Up,
-  Down,
-  Left,
-  Right
+ Up,
+ Down,
+ Left,
+ Right
 }
 
 // Enum with data (data variants)
 enum PlayerState {
-  Idle,
-  Running(speed),
-  Jumping(height, velocity),
-  Attacking(damage, cooldown)
+ Idle,
+ Running(speed),
+ Jumping(height, velocity),
+ Attacking(damage, cooldown)
 }
 ```
 
@@ -449,55 +347,51 @@ The `match` expression lets you handle different enum variants:
 
 ```rage
 enum PlayerState {
-  Idle,
-  Running(speed),
-  Jumping(height)
+ Idle,
+ Running(speed),
+ Jumping(height)
 }
 
 state = Running(5.0)
 
 // Match returns a value
 description = match state {
-  Idle => "Standing still",
-  Running(s) => "Moving at speed " + s,
-  Jumping(h) => "In the air at height " + h,
-  _ => "Unknown state"
+ Idle => "Standing still",
+ Running(s) => "Moving at speed " + s,
+ Jumping(h) => "In the air at height " + h,
+ _ => "Unknown state"
 }
 ```
 
 ### Pattern Types
 
 **Wildcard pattern (`_`):** Matches anything
+
 ```rage
 result = match value {
-  1 => "one",
-  2 => "two",
-  _ => "other"  // Catches all other cases
+ 1 => "one",
+ 2 => "two",
+ _ => "other"  // Catches all other cases
 }
 ```
 
 **Literal patterns:** Match exact values
+
 ```rage
 match count {
-  0 => "none",
-  1 => "one",
-  _ => "many"
-}
-```
-
-**Identifier patterns:** Bind the value to a name
-```rage
-match some_value {
-  x => x * 2  // x is bound to the value
+ 0 => "none",
+ 1 => "one",
+ _ => "many"
 }
 ```
 
 **Variant patterns:** Match and extract enum data
+
 ```rage
 match state {
-  Idle => "idle",
-  Running(speed) => "running at " + speed,
-  Jumping(h, v) => "jumping"
+ Idle => "idle",
+ Running(speed) => "running at " + speed,
+ Jumping(h, v) => "jumping"
 }
 ```
 
@@ -513,7 +407,6 @@ Clears the canvas with the specified color.
 ```rage
 clear("#000000")      // Black background
 clear("#2d3436")      // Dark gray
-clear("rgb(30, 30, 50)")
 ```
 
 #### `rect(x, y, width, height, color, alpha)`
@@ -604,8 +497,6 @@ sprite("player.png", 100, 100, 32, 32)
 sprite("spritesheet.png", 100, 100, 32, 32, sx=64, sy=0, sw=32, sh=32)
 ```
 
----
-
 ### Color Functions
 
 #### `rgb(r, g, b)`
@@ -642,8 +533,6 @@ Creates an HSLA color string with alpha.
 ```rage
 color = hsla(240, 100, 50, 0.5)  // Semi-transparent blue
 ```
-
----
 
 ### Math Functions
 
@@ -694,11 +583,11 @@ color = hsla(240, 100, 50, 0.5)  // Semi-transparent blue
 
 #### Constants
 
-| Function | Value |
+| Constant | Value |
 |----------|-------|
-| `PI()` | 3.14159... |
-| `TAU()` | 6.28318... (2π) |
-| `E()` | 2.71828... |
+| `PI` | 3.14159... |
+| `TAU` | 6.28318... (2π) |
+| `E` | 2.71828... |
 
 #### Random
 
@@ -706,8 +595,6 @@ color = hsla(240, 100, 50, 0.5)  // Semi-transparent blue
 |----------|-------------|---------|
 | `random()` | Random float 0-1 | `random()` → `0.7234...` |
 | `randomInt(min, max)` | Random integer (inclusive) | `randomInt(1, 6)` → `4` |
-
----
 
 ### Game Helper Functions
 
@@ -725,7 +612,7 @@ Calculate distance between two points.
 ```rage
 dist = distance(player.x, player.y, enemy.x, enemy.y)
 if (dist < 50) {
-  // Collision!
+ // Collision!
 }
 ```
 
@@ -734,11 +621,9 @@ Check if two rectangles overlap (collision detection).
 
 ```rage
 if (rect_overlap(player.x, player.y, 32, 32, enemy.x, enemy.y, 32, 32)) {
-  // Collision detected!
+ // Collision detected!
 }
 ```
-
----
 
 ### Array Functions
 
@@ -806,7 +691,7 @@ Check if array contains a value.
 
 ```rage
 if (contains(inventory, "key")) {
-  // Player has the key
+ // Player has the key
 }
 ```
 
@@ -871,33 +756,32 @@ words = ["hello", "world"]
 sentence = join(words, " ")  // "hello world"
 ```
 
----
-
 ### Input Functions
+
+Ragelang provides multiple ways to handle input: action-based input (abstracted controls), raw key input, mouse input, and touch input. Action-based input is recommended for most games as it automatically handles keyboard and gamepad input.
 
 #### Action-Based Input
 
-Actions are abstract inputs mapped to common controls:
+Actions are abstract inputs that map to multiple input methods (keyboard, gamepad). This makes your game work with both keyboard and gamepad without additional code.
 
-| Action | Keyboard | Description |
-|--------|----------|-------------|
-| `"left"` | Arrow Left, A | Move left |
-| `"right"` | Arrow Right, D | Move right |
-| `"up"` | Arrow Up, W | Move up |
-| `"down"` | Arrow Down, S | Move down |
-| `"jump"` | Space | Jump |
-| `"action"` | Enter | Primary action |
-| `"a"` | Z | Button A |
-| `"b"` | X | Button B |
-| `"start"` | Enter | Start/Pause |
-| `"select"` | Shift | Select |
+**Available Actions:**
+
+| Action | Keyboard | Gamepad | Description |
+|--------|----------|---------|-------------|
+| `"left"` | Arrow Left, A | D-Pad Left, Left Stick Left | Move left |
+| `"right"` | Arrow Right, D | D-Pad Right, Left Stick Right | Move right |
+| `"up"` | Arrow Up, W | D-Pad Up, Left Stick Up | Move up |
+| `"down"` | Arrow Down, S | D-Pad Down, Left Stick Down | Move down |
+| `"jump"` | Space | A/Cross Button | Jump |
+| `"interact"` | E | X/Square Button | Interact/Use |
+| `"start"` | Escape | Start Button | Start/Pause menu |
 
 #### `pressed(action)`
 Returns true on the **frame** the action starts.
 
 ```rage
 if (pressed("jump")) {
-  player.vel_y = -400  // Jump!
+ player.vel_y = -400  // Jump!
 }
 ```
 
@@ -906,7 +790,7 @@ Returns true **while** the action is held.
 
 ```rage
 if (held("right")) {
-  player.x = player.x + speed * dt
+ player.x = player.x + speed * dt
 }
 ```
 
@@ -915,117 +799,204 @@ Returns true on the **frame** the action ends.
 
 ```rage
 if (released("action")) {
-  // Fire after releasing button
+ // Fire after releasing button
 }
 ```
 
 #### Raw Key Input
 
-For specific key detection:
+For specific key detection when you need to check individual keys rather than actions. Use key names as defined by the [KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) API.
+
+**Common Key Names:**
+- Arrow keys: `"ArrowLeft"`, `"ArrowRight"`, `"ArrowUp"`, `"ArrowDown"`
+- Letters: `"a"`, `"b"`, `"c"`, etc. (lowercase)
+- Numbers: `"0"`, `"1"`, `"2"`, etc.
+- Special keys: `"Space"`, `"Enter"`, `"Escape"`, `"Shift"`, `"Control"`, `"Alt"`
+- Function keys: `"F1"`, `"F2"`, etc.
 
 #### `key_pressed(key)`
-True when a specific key is first pressed.
+Returns `true` on the frame a specific key is first pressed.
 
 ```rage
-if (key_pressed("ArrowLeft")) { ... }
-if (key_pressed(" ")) { ... }  // Space
-if (key_pressed("a")) { ... }
+if (key_pressed("ArrowLeft")) {
+ // Left arrow just pressed
+}
+if (key_pressed(" ")) { ... }  // Space bar
+if (key_pressed("a")) { ... }  // 'a' key
+if (key_pressed("Escape")) {
+ // Open menu
+}
 ```
 
 #### `key_held(key)`
-True while a specific key is held.
+Returns `true` while a specific key is held down.
 
 ```rage
 if (key_held("Shift")) {
-  // Run faster
+ // Run faster while shift is held
+ speed = base_speed * 2
 }
 ```
 
 #### `key_released(key)`
-True when a specific key is released.
+Returns `true` on the frame a specific key is released.
 
----
+```rage
+if (key_released("Space")) {
+ // Space bar was just released
+}
+```
 
 #### Mouse Input
 
+Mouse input provides position and button state. The coordinates are relative to the canvas element.
+
 #### `mouse_x()` / `mouse_y()`
-Get the current mouse position.
+Get the current mouse position in pixels, relative to the canvas.
 
 ```rage
 mx = mouse_x()
 my = mouse_y()
-circle(mx, my, 5, "#ff0000")  // Cursor
+circle(mx, my, 5, "#ff0000")  // Draw cursor
 ```
 
+**Note:** Mouse position is only accurate when the mouse is over the canvas element.
+
 #### `mouse_pressed(button)` / `mouse_held(button)` / `mouse_released(button)`
-Mouse button input (0=left, 1=middle, 2=right).
+Mouse button input. Returns `true` for the specified button state.
+
+| Button | Value | Description |
+|--------|-------|-------------|
+| Left | `0` | Primary mouse button |
+| Middle | `1` | Middle mouse button (scroll wheel click) |
+| Right | `2` | Right mouse button |
 
 ```rage
 if (mouse_pressed(0)) {
-  // Left click
-  shoot(mouse_x(), mouse_y())
+ // Left click just happened
+ shoot(mouse_x(), mouse_y())
+}
+
+if (mouse_held(0)) {
+ // Left button is being held
+ drag_item(mouse_x(), mouse_y())
+}
+
+if (mouse_released(0)) {
+ // Left button was just released
+ drop_item()
 }
 ```
 
----
-
 #### Touch Input
 
+Touch input is designed for mobile devices and touchscreens. Touch coordinates are relative to the canvas element.
+
 #### `touch_count()`
-Number of active touch points.
+Returns the number of active touch points (fingers on screen).
 
 ```rage
 if (touch_count() > 0) {
-  // Touch detected
+ // At least one finger is touching the screen
+ text("Touch detected!", 10, 10, 16, "#ffffff")
+}
+
+// Multi-touch support
+if (touch_count() >= 2) {
+ // Two or more fingers - pinch gesture?
 }
 ```
 
 #### `touch_x(index)` / `touch_y(index)`
-Get position of a specific touch point.
+Get the position of a specific touch point. The `index` parameter specifies which touch point (0 = first touch, 1 = second touch, etc.).
 
 ```rage
 if (touch_count() > 0) {
-  tx = touch_x(0)
-  ty = touch_y(0)
+ // Get position of first touch
+ tx = touch_x(0)
+ ty = touch_y(0)
+ circle(tx, ty, 10, "#00ff00")
+}
+
+// Handle multiple touches
+if (touch_count() >= 2) {
+ touch1_x = touch_x(0)
+ touch1_y = touch_y(0)
+ touch2_x = touch_x(1)
+ touch2_y = touch_y(1)
+ // Calculate distance between touches for pinch gesture
 }
 ```
 
----
+**Note:** Always check `touch_count()` before accessing touch positions. Accessing a touch index that doesn't exist will return 0.
 
 #### Input Buffering (Advanced)
 
-Input buffering allows for more forgiving controls in platformers.
+Input buffering is a technique used in platformers to make controls feel more responsive. It allows players to press a button slightly before they're able to perform the action, and the input will be "remembered" for a short time.
+
+**Common Use Cases:**
+- **Jump buffering**: Press jump slightly before landing, and the jump executes when you land
+- **Coyote time**: Allow jumping for a short time after leaving a platform
+- **Input queuing**: Queue up actions that can't be performed immediately
 
 #### `buffer_input(action, duration)`
-Buffer an input for the specified duration (seconds).
+Buffer an input for the specified duration (in seconds). The input will be available for checking until the duration expires.
 
 ```rage
 if (pressed("jump")) {
-  buffer_input("jump", 0.1)  // Buffer for 100ms
+ buffer_input("jump", 0.1)  // Buffer for 100ms
 }
 ```
 
+**Typical buffer durations:**
+- Jump buffering: 0.1-0.15 seconds
+- Action queuing: 0.2-0.3 seconds
+
 #### `check_buffer(action)`
-Check if an action is buffered (consumes the buffer).
+Check if an action is buffered and **consumes** the buffer (removes it). Returns `true` if the action was buffered, `false` otherwise.
 
 ```rage
 // In update loop, when player lands:
 if (player.on_ground and check_buffer("jump")) {
-  // Execute buffered jump
-  player.vel_y = -400
+ // Execute buffered jump
+ player.vel_y = -400
+ clear_buffer("jump")  // Optional: clear after use
 }
 ```
 
+**Important:** `check_buffer()` consumes the buffer. If it returns `true`, the buffer is removed and won't be available on the next check.
+
 #### `peek_buffer(action)`
-Check buffer without consuming it.
+Check if an action is buffered **without consuming** it. Returns `true` if buffered, but leaves the buffer intact.
+
+```rage
+if (peek_buffer("jump")) {
+ // Jump is buffered, but don't consume it yet
+ // Maybe show a visual indicator
+}
+```
 
 #### `clear_buffer(action)` / `clear_all_buffers()`
-Clear buffered inputs.
+Clear specific or all buffered inputs.
+
+```rage
+// Clear a specific buffered action
+clear_buffer("jump")
+
+// Clear all buffered inputs (useful when changing game states)
+clear_all_buffers()
+```
 
 #### `buffer_time(action)`
-Get remaining buffer time in seconds.
+Get the remaining buffer time in seconds for a specific action. Returns `0` if the action is not buffered or has expired.
 
----
+```rage
+remaining = buffer_time("jump")
+if (remaining > 0) {
+ // Jump is still buffered, show countdown
+ text("Jump buffered: " + round(remaining * 100) + "ms", 10, 10, 16, "#ffff00")
+}
+```
 
 ### Audio Functions
 
@@ -1071,8 +1042,6 @@ Stop all currently playing sounds.
 #### `master_volume(volume)`
 Set master volume for all audio (0-10).
 
----
-
 ### Utility Functions
 
 #### `print(...args)`
@@ -1081,6 +1050,37 @@ Print values to the console (for debugging).
 ```rage
 print("Player position:", player.x, player.y)
 print("Score:", score)
+```
+
+#### `time()`
+Returns time since epoch in seconds.
+
+#### `frames()`
+Returns number of frames that have been rendered.
+
+---
+
+## Canvas and Screen
+
+### `width()` / `height()`
+Get the canvas dimensions in pixels.
+
+```rage
+center_x = width() / 2
+center_y = height() / 2
+```
+
+---
+
+## Scene Management
+
+### `load_scene(path)`
+Loads a new rage script, resetting the current runtime. The path is relative to the game's asset directory.
+
+```rage
+if (player.health <= 0) {
+ load_scene("assets/rage/game-over.rage")
+}
 ```
 
 ---
@@ -1125,17 +1125,20 @@ s[:2]   // "he"
 
 ## The `draw` Block
 
-The `draw` block is called every frame and is where you render graphics:
+The `draw` block is called every frame and is where you render graphics.
+You should not modify data in the draw block, because it does not give the delta time.
+
+Ragelang is single threaded, so it's not a hard rule, but it does result in a a smoother game in most cases.
 
 ```rage
 draw {
-  clear("#000000")
-  
-  // Draw game objects
-  rect(player.x, player.y, 32, 32, "#00ff00")
-  
-  // Draw UI
-  text("Score: " + score, 10, 30, 16, "#ffffff")
+ clear("#000000")
+ 
+ // Draw game objects
+ rect(player.x, player.y, 32, 32, "#00ff00")
+ 
+ // Draw UI
+ text("Score: " + score, 10, 30, 16, "#ffffff")
 }
 ```
 
@@ -1147,14 +1150,14 @@ The `update` block is called every frame with delta time (`dt`) as a parameter:
 
 ```rage
 update(dt) {
-  // dt is the time in seconds since last frame
-  // Typically around 0.016 (60 FPS)
-  
-  // Frame-independent movement
-  player.x = player.x + velocity * dt
-  
-  // Apply gravity
-  player.vel_y = player.vel_y + gravity * dt
+ // dt is the time in seconds since last frame
+ // Typically around 0.016 (60 FPS)
+ 
+ // Frame-independent movement
+ player.x = player.x + velocity * dt
+ 
+ // Apply gravity
+ player.vel_y = player.vel_y + gravity * dt
 }
 ```
 
