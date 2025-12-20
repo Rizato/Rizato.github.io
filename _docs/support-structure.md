@@ -33,7 +33,7 @@ A character is supported if there is a non-space character in one of these posit
 Support is **recursive** - a character can only support others if it is itself supported. This means you need a chain of support all the way down to the foundation.
 
 ```rage
-// This works - each character is supported
+// The shape below works, while this comment is not supported and will collapse
 //   |
 //  /|\
 //   |
