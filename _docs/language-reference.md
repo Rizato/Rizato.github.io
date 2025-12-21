@@ -774,7 +774,7 @@ Actions are abstract inputs that map to multiple input methods (keyboard, gamepa
 | `"down"` | Arrow Down, S | D-Pad Down, Left Stick Down | Move down |
 | `"jump"` | Space | A/Cross Button | Jump |
 | `"interact"` | E | X/Square Button | Interact/Use |
-| `"start"` | Escape | Start Button | Start/Pause menu |
+| `"start"` | P | Start Button | Start/Pause menu |
 
 #### `pressed(action)`
 Returns true on the **frame** the action starts.
@@ -1068,6 +1068,21 @@ Get the canvas dimensions in pixels.
 ```rage
 center_x = width() / 2
 center_y = height() / 2
+```
+
+### `window_focused()`
+Returns `true` if the browser window/tab has focus, `false` otherwise. Useful for pausing the game when the player switches tabs or windows.
+
+```rage
+if (!window_focused()) {
+  // Window lost focus - pause game
+  game_paused = true
+}
+
+if (window_focused() && game_paused) {
+  // Window regained focus - resume game
+  game_paused = false
+}
 ```
 
 ---
